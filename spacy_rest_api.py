@@ -11,6 +11,7 @@ import json
 import spacy
 from spacy.symbols import attr, nsubj, VERB, NOUN, PROPN
 from subject_object_extraction import findSVOs, printDeps
+from svo import SVO
 
 
 # Load the language model only one time in the life cycle
@@ -20,6 +21,7 @@ app = Flask(__name__)
 
 
 # This route is for printing out eh dep tree for a sentence
+# based on spacy
 # required param - sentence
 
 @app.route("/parse/")
@@ -42,6 +44,7 @@ def parse_text():
     print(token_json)
 
     # Parse for verbs in the tree
+    # based on spacy
     # Finding a verb with a subject from below — good
     verbs = set()
     for possible_subject in doc:
@@ -52,7 +55,7 @@ def parse_text():
 
     return json.dumps(token_json)
 
-# try getting the head word of a sentence 
+# try getting the head word of a sentence via spacy
 # the head word might be the key thing the user is talking about
 @app.route("/headword/")
 def head_word():
@@ -74,8 +77,9 @@ def head_word():
 
 
 # Obtain SVOs for a sentence
-@app.route("/getsvos/")
-def get_svos():
+# DEPRECATED
+@app.route("/oldgetsvos/")
+def old_get_svos():
     svos = {}
     doc = nlp(u'' + request.args.get('sentence'))
     svos = findSVOs(doc)
@@ -83,5 +87,36 @@ def get_svos():
     print(svos)
     return json.dumps(svos)
 
+# Obtain SVOs for sentence based on stanford NLP 
+@app.route("/getsvos/")
+def get_svos():
+    svo = SVO()
+    sentences =  svo.sentence_split(request.args.get('sentence'))
+    val = []
+    print(sentences)
+    for sent in sentences:
+        root_tree = svo.get_parse_tree(sent)
+        val.append(svo.process_parse_tree(next(root_tree)))
 
-    
+    print(val)
+    return json.dumps(val)
+
+
+# try getting the verb in past participle form of a sentence via spacy
+# the verb might be the key to what the user wants to do 
+@app.route("/getverb/")
+def get_verb():
+    verb_term = "null"
+    # Loop through and form json response
+    token_json = []
+    #question = "What films featured the character Popeye Doyle ?"
+    doc = nlp(u'' + request.args.get('sentence'))
+    for sent in doc.sents:
+        for token in sent:
+            print(token.pos_)
+            if token.tag_ == 'VBN' or token.tag_ == VERB:
+                verb_term = token.text
+        token_json.append({'verb_term': verb_term})
+
+    return json.dumps(token_json)
+

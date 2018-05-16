@@ -2,3 +2,7 @@ spacystuff
 spacystuff/*
 __pycache__
 __pycache__/*
+models/
+models/*
+*.csv
+*.txt

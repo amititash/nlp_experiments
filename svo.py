@@ -10,8 +10,8 @@ import sys
 #reload(sys)
 #sys.setdefaultencoding("utf-8")
 
-os.environ['STANFORD_PARSER'] = ''
-os.environ['STANFORD_MODELS'] = ''
+os.environ['STANFORD_PARSER'] = '/Users/titashneogi/workspace/nlp/nlp_experiments/models/stanford-parser-full-2018-02-27/stanford-parser.jar'
+os.environ['STANFORD_MODELS'] = '/Users/titashneogi/workspace/nlp/nlp_experiments/models/stanford-parser-full-2018-02-27/stanford-parser-3.9.1-models.jar'
 
 class SVO(object):
     """
