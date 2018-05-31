@@ -6,3 +6,6 @@ models/
 models/*
 *.csv
 *.txt
+data/
+dev.jsonl
+dev_test.json

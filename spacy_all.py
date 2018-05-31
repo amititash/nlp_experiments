@@ -18,6 +18,9 @@ from textblob import TextBlob
 # Load the language model only one time in the life cycle
 nlp = spacy.load('en')
 
+merge_entities = nlp.create_pipe('merge_noun_chunks')
+nlp.add_pipe(merge_entities, after='ner')
+
 app = Flask(__name__)
 
 
@@ -26,15 +29,13 @@ app = Flask(__name__)
 # required param - sentence
 
 def get_nouns(doc, token_json):
-    # noun_chunks = []
+    noun_chunks = ""
     # Parse for noun chunks
     for chunk in doc.noun_chunks:
-        token_json.append(
-        {"chunk": str(chunk),           # A Span object with the full phrase.
-        "root": str(chunk.root),       # The key Token within this phrase.
-        "dep": str(chunk.root.dep_),  # The grammatical role of this phrase.
-        "roothead": str(chunk.root.head)   # The grammatical parent Token.
-        })
+        # Create a arrow separated string that can be appended into the 
+        # json object. this maintains the structure and is easy to analyse
+        noun_chunks = str(chunk) + "->" + str(chunk.root) + "->" + str(chunk.root.dep_) + "->" + str(chunk.root.head)
+        token_json.append({"nounChunk" : noun_chunks})
 
     return True
 
@@ -43,8 +44,10 @@ def get_nouns(doc, token_json):
 def get_deps(doc, token_json):
     # dependencies = []
     for sent in doc.sents:
+        dep_tree = ""
         for token in sent:
-            token_json.append({token.dep_ : token.text})
+            dep_tree = dep_tree + "->"+ token.dep_
+        token_json.append({"depTree" : dep_tree})
 
     return True
 
@@ -63,15 +66,20 @@ def get_svos(sentence):
 # Use textblob for POS - easier functionality
 def get_pos(sentence, token_json):
     blob = TextBlob(sentence)
-    # pos_list = []
-    for word, pos in blob.tags:
-        print(word, pos)
-        token_json.append({pos : word})
+    pos_list = ""
+
+    # since htis is a tuple we will have to first join
+    # then split and then get the 1st element
+    Separator = '-'
+    for pos in blob.tags:
+        posWord = Separator.join(pos).split('-')[1]
+        pos_list = pos_list + "->" + posWord
+    #collect all the strings and push them in the JSON array
+    token_json.append({"posList" : pos_list})
         
     return True
 
-# Obtain SVOs for a sentence
-# DEPRECATED
+
 @app.route("/getall/")
 def get_all():
     #parse nlp 
@@ -79,17 +87,18 @@ def get_all():
     # Loop through and form json response
     token_json = []
 
+    # get noun chunks
     get_nouns(doc, token_json)
-   # token_json.append(nouns)
+   
 
-    deps = get_deps(doc, token_json)
+    # get dependency tree
+    get_deps(doc, token_json)
    # token_json.append(deps)
 
-    pos = get_pos(request.args.get('sentence'), token_json)
-   # token_json.append(pos)
+    # get part of speech
+    get_pos(request.args.get('sentence'), token_json)
+   
 
-   # svos = get_svos(request.args.get('sentence'))
-   # token_json.append({"svos" : svos})
 
     print(token_json)
     return json.dumps(token_json)

@@ -16,7 +16,7 @@ import urllib
 
 if __name__ == "__main__":
     # Load the file that has the questions 
-    fname='questions.txt'
+    fname='greeting_dataset.txt'
     with open(fname) as f:
         content = f.readlines()
 
@@ -65,7 +65,7 @@ for con in content:
 
 
     # if file does not exist write header 
-    if not os.path.isfile('results.csv'):
-        df.T.to_csv('results.csv',header ='column_names')
+    if not os.path.isfile('greeting_results.csv'):
+        df.T.to_csv('greeting_results.csv',header ='column_names')
     else: # else it exists so append without writing the header
-        df.T.to_csv('results.csv',mode = 'a',header ='column_names')
+        df.T.to_csv('greeting_results.csv',mode = 'a',header ='column_names')
