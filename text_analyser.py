@@ -1,3 +1,4 @@
+# coding: utf-8
 '''
 
 Utility file that generates pos and chunk data to be analysed for query patterns
@@ -12,6 +13,7 @@ import json
 import os
 import wget
 import urllib
+
 
 
 if __name__ == "__main__":

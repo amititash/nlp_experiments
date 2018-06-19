@@ -1,0 +1,36 @@
+,depTree,nounChunk,nounChunk_1,posList
+->nsubj->ROOT->dobj->prep->pobj->det->npadvmod,we->we->nsubj->made,profits->profits->pobj->of,->PRP->VBD->DT->NN->IN->NNS->DT->NN
+->nsubj->aux->ROOT->dobj->prep->pobj
+
+
+,depTree,nounChunk,nounChunk_1,posList
+0,->nsubj->ROOT->nsubj->ccomp->dobj->prep->pobj,sales results metrics->sales results metrics->nsubj->help,your past strategy->your past strategy->pobj->of,->NNS->NNS->NNS->VBP->PRP->VBP->DT->NN->IN->PRP$->JJ->NN
+
+
+1. make list of questions from various sources for analytics
+2. categories them -> intent mapping
+3. run dep tree on them and there variant with stop words stripped
+4. run pos tagger to identify terms
+5. pattern analyse the dep tree to see if things are predictable
+
+---
+
+for each category/intent write a mapping soql query
+the incoming intent should lead to query and entities 
+create an algo that recursively looks for the closest matching SOQL 
+
+
+Relationship rules
+
+1. Nodes only NNS and NNP (noun or noun phrase)
+2. Relationships only single word verbs
+3. Break down phrases to root noun 
+
+
+
+1. sentence to send to dep tree and pos tree
+2. extract nouns and verbs and depTree
+3. send to info extractor - strip PRP and Dets
+4. get the output of info extract and match resulting graph
+5. create a final graph
+
