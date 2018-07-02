@@ -65,8 +65,12 @@ def head_word():
     #question = "What films featured the character Popeye Doyle ?"
     doc = nlp(u'' + request.args.get('sentence'))
     for sent in doc.sents:
+
+        nsubj
         for token in sent:
             token_json.append({token.text: token.dep_})
+
+
             if token.dep == nsubj and (token.pos == NOUN or token.pos == PROPN):
                 head_word = token.text
             elif token.dep == attr and (token.pos == NOUN or token.pos == PROPN):
@@ -114,7 +118,7 @@ def get_verb():
     for sent in doc.sents:
         for token in sent:
             print(token.pos_)
-            if token.tag_ == 'VBN' or token.tag_ == VERB:
+            if token.pos_ == 'VBN' or token.pos_ == 'VERB':
                 verb_term = token.text
         token_json.append({'verb_term': verb_term})
 

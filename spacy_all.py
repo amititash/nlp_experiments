@@ -26,6 +26,24 @@ nlp.add_pipe(merge_entities, after='ner')
 app = Flask(__name__)
 
 
+# try getting the head word of a sentence via spacy
+# the head word might be the key thing the user is talking about
+#@app.route("/headword/")
+def head_word(doc, token_json):
+    head_word = "null"
+    # Loop through and form json response
+    
+    for sent in doc.sents:
+        for token in sent:
+            token_json.append({token.text: token.dep_})
+            if token.dep == nsubj and (token.pos == NOUN or token.pos == PROPN):
+                head_word = token.text
+            elif token.dep == attr and (token.pos == NOUN or token.pos == PROPN):
+                head_word = token.text
+        token_json.append({'head_word': head_word})
+
+    return True
+
 
 # This route is for printing out eh dep tree for a sentence
 # based on spacy
@@ -142,6 +160,9 @@ def get_all():
     doc = nlp(u'' + request.args.get('sentence'))
     # Loop through and form json response
     token_json = []
+
+     # get noun chunks
+    head_word(doc, token_json)
 
     # get noun chunks
     get_nouns(doc, token_json)
