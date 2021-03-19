@@ -42,7 +42,7 @@ idna==2.6
 ipaddress==1.0.19
 itsdangerous==0.24
 jdcal==1.4
-Jinja2==2.10
+Jinja2==2.11.3
 jmespath==0.9.3
 JSON-log-formatter==0.2.0
 kiwisolver==1.0.1
