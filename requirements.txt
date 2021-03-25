@@ -77,7 +77,7 @@ PySocks==1.6.8
 python-crfsuite==0.9.2
 python-dateutil==2.6.1
 pytz==2018.4
-PyYAML==3.12
+PyYAML==5.4
 records==0.5.2
 regex==2017.4.5
 requests==2.18.4
