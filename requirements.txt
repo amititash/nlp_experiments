@@ -102,7 +102,7 @@ topia.termextract==1.1.0
 tornado==5.0.2
 tqdm==4.23.1
 twython==3.6.0
-ujson==1.35
+ujson==5.2.0
 unicodecsv==0.14.1
 urllib3==1.22
 watchdog==0.8.3
